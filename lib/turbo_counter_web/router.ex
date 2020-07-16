@@ -18,6 +18,7 @@ defmodule TurboCounterWeb.Router do
     pipe_through :browser
 
     live "/", PageLive, :index
+    live "/count", CountLive
   end
 
   # Other scopes may use custom stacks.
