@@ -1,21 +1,38 @@
 defmodule TurboCounterWeb.CountLive do
   use TurboCounterWeb, :live_view
+  alias TurboCounter.Counters
 
   def mount(_params, _session, socket) do
     :timer.send_interval 1000, self(), :tick
-    {:ok, assign(socket, hello: :world, count: 0)}
+    {
+      :ok,
+      socket
+      |> new
+      |> add_calendar(:count, 0)
+    }
+  end
+
+  defp new(socket) do
+    assign(socket, counters: Counters.new())
+  end
+
+  defp add_calendar(socket, name, count) do
+    assign(
+      socket,
+      counters: Counters.add_counter(socket.assigns.counters, name, count)
+      )
   end
 
   def render(assigns) do
     ~L"""
-    <h1>Welcome to Turbo Counter, <%= @hello %> </h1>
+    <h1>Welcome to Turbo Counter! </h1>
     <h2>If you dream it, we can count it!<h2>
-    <p>Count: <%= @count %> </p>
+    <p>Count: <%= @counters.count %> </p>
     """
   end
 
   def count(socket) do
-    assign(socket, count: socket.assigns.count + 1)
+    assign(socket, counters: Counters.inc(socket.assigns.counters, :count))
   end
 
   def handle_info(:tick, socket) do
