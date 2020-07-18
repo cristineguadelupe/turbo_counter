@@ -8,7 +8,7 @@ defmodule TurboCounterWeb.CountLive do
       :ok,
       socket
       |> new
-      |> add_calendar(:count, 0)
+      |> add_counter(:count, 0)
     }
   end
 
@@ -16,7 +16,7 @@ defmodule TurboCounterWeb.CountLive do
     assign(socket, counters: Counters.new())
   end
 
-  defp add_calendar(socket, name, count) do
+  defp add_counter(socket, name, count) do
     assign(
       socket,
       counters: Counters.add_counter(socket.assigns.counters, name, count)
