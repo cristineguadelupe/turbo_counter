@@ -31,7 +31,7 @@ defmodule TurboCounterWeb.CountLive do
     """
   end
 
-  def count(socket) do
+  defp count(socket) do
     assign(socket, counters: Counters.inc(socket.assigns.counters, :count))
   end
 
