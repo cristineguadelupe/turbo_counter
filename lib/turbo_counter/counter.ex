@@ -8,6 +8,21 @@ defmodule TurboCounter.Counters do
     Map.put(counters, name, value)
   end
 
+  def add_counter(counters) do
+    Map.put(counters, max_counter_name(counters), 0)
+  end
+
+  defp max_counter_name(counters) do
+    counters
+    |> Map.keys
+    |> Enum.map(&String.to_integer/1)
+    |> Enum.max
+    |> Kernel.+(1)
+    |> to_string
+  rescue
+    _e -> "1"
+  end
+
   def remove_counter(counters, name) do
     Map.delete(counters, name)
   end
