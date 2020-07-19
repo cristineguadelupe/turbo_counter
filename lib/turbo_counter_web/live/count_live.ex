@@ -8,6 +8,7 @@ defmodule TurboCounterWeb.CountLive do
       socket
       |> new
       |> add_counter
+      |> add_counter
     }
   end
 
@@ -26,39 +27,38 @@ defmodule TurboCounterWeb.CountLive do
     ~L"""
     <h1>Welcome to Turbo Counter! </h1>
     <h2>If you dream it, we can count it!<h2>
-    <p>Count: <%= @counters["1"] %>
-      <button phx-click="inc">Inc</button> |
-      <button phx-click="dec">Dec</button> |
-      <button phx-click="clear">Clear</button>
-    </p>
+    <hr>
+    <%= for {name, count} <- @counters do %>
+      <p>Count <%= name %>: <%= count %>
+        <button phx-click="inc" phx-value-counter="<%= name %>">Inc</button> |
+        <button phx-click="dec" phx-value-counter="<%= name %>">Dec</button> |
+        <button phx-click="clear"phx-value-counter="<%= name %>">Clear</button>
+      </p>
+    <% end %>
     """
   end
 
-  defp count(socket) do
-    assign(socket, counters: Counters.inc(socket.assigns.counters, "1"))
+  defp inc(socket, counter) do
+    assign(socket, counters: Counters.inc(socket.assigns.counters, counter))
   end
 
-  defp dec(socket) do
-    assign(socket, counters: Counters.dec(socket.assigns.counters, "1"))
+  defp dec(socket, counter) do
+    assign(socket, counters: Counters.dec(socket.assigns.counters, counter))
   end
 
-  defp clear(socket) do
-    assign(socket, counters: Counters.clear(socket.assigns.counters, "1"))
+  defp clear(socket, counter) do
+    assign(socket, counters: Counters.clear(socket.assigns.counters, counter))
   end
 
-  def handle_info(:tick, socket) do
-    {:noreply, count(socket)}
+  def handle_event("inc", %{"counter" => counter}, socket) do
+    {:noreply, inc(socket, counter)}
   end
 
-  def handle_event("inc", _, socket) do
-    {:noreply, count(socket)}
+  def handle_event("dec", %{"counter" => counter}, socket) do
+    {:noreply, dec(socket, counter)}
   end
 
-  def handle_event("dec", _, socket) do
-    {:noreply, dec(socket)}
-  end
-
-  def handle_event("clear", _, socket) do
-    {:noreply, clear(socket)}
+  def handle_event("clear", %{"counter" => counter}, socket) do
+    {:noreply, clear(socket, counter)}
   end
 end
