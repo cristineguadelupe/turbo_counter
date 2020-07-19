@@ -7,20 +7,11 @@ defmodule TurboCounterWeb.CountLive do
       :ok,
       socket
       |> new
-      |> add_counter
-      |> add_counter
     }
   end
 
   defp new(socket) do
     assign(socket, counters: Counters.new())
-  end
-
-  defp add_counter(socket) do
-    assign(
-      socket,
-      counters: Counters.add_counter(socket.assigns.counters)
-      )
   end
 
   def render(assigns) do
@@ -40,7 +31,9 @@ defmodule TurboCounterWeb.CountLive do
     """
   end
 
-
+  defp add(socket) do
+    assign(socket, counters: Counters.add_counter(socket.assigns.counters))
+  end
   defp inc(socket, counter) do
     assign(socket, counters: Counters.inc(socket.assigns.counters, counter))
   end
@@ -54,7 +47,7 @@ defmodule TurboCounterWeb.CountLive do
   end
 
   def handle_event("add", _, socket) do
-    {:noreply, add_counter(socket)}
+    {:noreply, add(socket)}
   end
 
   def handle_event("inc", %{"counter" => counter}, socket) do
