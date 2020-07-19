@@ -23,7 +23,8 @@ defmodule TurboCounterWeb.CountLive do
       <p>Count <%= name %>: <%= count %>
         <button phx-click="inc" phx-value-counter="<%= name %>">Inc</button> |
         <button phx-click="dec" phx-value-counter="<%= name %>">Dec</button> |
-        <button phx-click="clear"phx-value-counter="<%= name %>">Clear</button>
+        <button phx-click="clear"phx-value-counter="<%= name %>">Clear</button> |>
+        <button phx-click="delete"phx-value-counter="<%= name %>">Delete</button>
       </p>
     <% end %>
     <hr>
@@ -46,6 +47,10 @@ defmodule TurboCounterWeb.CountLive do
     assign(socket, counters: Counters.clear(socket.assigns.counters, counter))
   end
 
+  defp delete(socket, counter) do
+    assign(socket, counters: Counters.remove_counter(socket.assigns.counters, counter))
+  end
+
   def handle_event("add", _, socket) do
     {:noreply, add(socket)}
   end
@@ -60,6 +65,10 @@ defmodule TurboCounterWeb.CountLive do
 
   def handle_event("clear", %{"counter" => counter}, socket) do
     {:noreply, clear(socket, counter)}
+  end
+
+  def handle_event("delete", %{"counter" => counter}, socket) do
+    {:noreply, delete(socket, counter)}
   end
 
 end
