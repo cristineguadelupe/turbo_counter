@@ -26,12 +26,19 @@ defmodule TurboCounterWeb.CountLive do
     ~L"""
     <h1>Welcome to Turbo Counter! </h1>
     <h2>If you dream it, we can count it!<h2>
-    <p>Count: <%= @counters["1"] %> <button phx-click="inc">Inc</button> </p>
+    <p>Count: <%= @counters["1"] %>
+      <button phx-click="inc">Inc</button> |
+      <button phx-click="dec">Dec</button>
+    </p>
     """
   end
 
   defp count(socket) do
     assign(socket, counters: Counters.inc(socket.assigns.counters, "1"))
+  end
+
+  defp dec(socket) do
+    assign(socket, counters: Counters.dec(socket.assigns.counters, "1"))
   end
 
   def handle_info(:tick, socket) do
@@ -40,5 +47,9 @@ defmodule TurboCounterWeb.CountLive do
 
   def handle_event("inc", _, socket) do
     {:noreply, count(socket)}
+  end
+
+  def handle_event("dec", _, socket) do
+    {:noreply, dec(socket)}
   end
 end
