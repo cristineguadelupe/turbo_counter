@@ -35,4 +35,8 @@ defmodule TurboCounter.Counters do
     Map.put(counters, name, counters[name] -1 )
   end
 
+  def clear(counters, name) do
+    Map.put(counters, name, 0)
+  end
+
 end
