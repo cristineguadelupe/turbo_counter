@@ -16,7 +16,7 @@ defmodule TurboCounterWeb.CountLive do
   end
 
   defp named(socket) do
-    assign(socket, named: :named)
+    assign(socket, named: :name)
   end
 
   def render(assigns) do
@@ -65,7 +65,7 @@ defmodule TurboCounterWeb.CountLive do
     assign(socket, counters: Counters.remove_counter(socket.assigns.counters, counter))
   end
 
-  def handle_event("save", %{"named" => name}, socket) do
+  def handle_event("save", %{"name" => name}, socket) do
     {:noreply, save(socket, name)}
   end
 
