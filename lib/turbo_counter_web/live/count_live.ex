@@ -7,7 +7,7 @@ defmodule TurboCounterWeb.CountLive do
       :ok,
       socket
       |> new
-      |> named
+      |> name
     }
   end
 
@@ -15,8 +15,8 @@ defmodule TurboCounterWeb.CountLive do
     assign(socket, counters: Counters.new())
   end
 
-  defp named(socket) do
-    assign(socket, named: :name)
+  defp name(socket) do
+    assign(socket, name: "")
   end
 
   def render(assigns) do
@@ -35,9 +35,9 @@ defmodule TurboCounterWeb.CountLive do
     <hr>
     <button phx-click="add">Add a counter</button>
     <hr>
-    <%= f = form_for @named, "#", phx_submit: "save" %>
-      <%= text_input f, :name %>
-      <%= submit "Add named counter" %>
+    <form phx-submit="save" autocomplete="off">
+      <input type="text" name="name" value="<%= @name %>"/>
+      <button type="submit"> Add a named counter </button>
     </form>
     """
   end
