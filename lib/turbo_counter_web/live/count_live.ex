@@ -7,11 +7,16 @@ defmodule TurboCounterWeb.CountLive do
       :ok,
       socket
       |> new
+      |> named
     }
   end
 
   defp new(socket) do
     assign(socket, counters: Counters.new())
+  end
+
+  defp named(socket) do
+    assign(socket, named: :named)
   end
 
   def render(assigns) do
@@ -29,7 +34,16 @@ defmodule TurboCounterWeb.CountLive do
     <% end %>
     <hr>
     <button phx-click="add">Add a counter</button>
+    <hr>
+    <%= f = form_for @named, "#", phx_submit: "save" %>
+      <%= text_input f, :name %>
+      <%= submit "Add named counter" %>
+    </form>
     """
+  end
+
+  defp save(socket, name) do
+    assign(socket, counters: Counters.add_counter(socket.assigns.counters, name, 0))
   end
 
   defp add(socket) do
@@ -49,6 +63,10 @@ defmodule TurboCounterWeb.CountLive do
 
   defp delete(socket, counter) do
     assign(socket, counters: Counters.remove_counter(socket.assigns.counters, counter))
+  end
+
+  def handle_event("save", %{"named" => name}, socket) do
+    {:noreply, save(socket, name)}
   end
 
   def handle_event("add", _, socket) do
